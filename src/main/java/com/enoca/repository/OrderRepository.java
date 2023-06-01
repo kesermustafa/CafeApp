@@ -12,8 +12,6 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
 
-    List<Order> findByDateBefore(LocalDateTime dateTime);
-
     List<Order> findByDateAfter(LocalDateTime dateTime);
 
 }
