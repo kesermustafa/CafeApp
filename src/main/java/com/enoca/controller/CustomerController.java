@@ -63,7 +63,7 @@ public class CustomerController {
 
 
     @GetMapping("/like")
-    public ResponseEntity<List<Customer>> getAllWithLike(@RequestParam("name")  String name){
+    public ResponseEntity<List<Customer>> getAllWithLike(@RequestParam("name") String name){
 
         List<Customer> customers = customerService.getAllWithLike(name);
         return ResponseEntity.ok(customers);
@@ -71,7 +71,7 @@ public class CustomerController {
 
 
     @GetMapping("/last")
-    public ResponseEntity<List<CustomersWithLastOrder>> getCustomersWithLastOrder(@RequestParam("name")  String name){
+    public ResponseEntity<List<CustomersWithLastOrder>> getCustomersWithLastOrder(@RequestParam("name") String name){
 
         List<CustomersWithLastOrder> customers = customerService.getCustomersWithLastOrder(name);
         return ResponseEntity.ok(customers);

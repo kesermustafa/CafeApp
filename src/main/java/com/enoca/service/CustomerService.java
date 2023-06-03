@@ -138,21 +138,20 @@ public class CustomerService {
 
         for (Customer w  : customers ) {
 
-            CustomersWithLastOrder custom = new CustomersWithLastOrder();
+            if(w != null && w.getOrders() != null && !w.getOrders().isEmpty()){
 
-            if(w.getOrders()!=null){
+                CustomersWithLastOrder custom = new CustomersWithLastOrder();
                 Long maxId = w.getOrders().stream().mapToLong(Order::getId).max().orElse(0);
                 custom.setName(w.getName());
                 custom.setAge(w.getAge());
                 custom.setLastOrderId(maxId);
+                newCustomer.add(custom);
             }
-
-            newCustomer.add(custom);
-
         }
 
         return newCustomer;
     }
+
 
 
 
