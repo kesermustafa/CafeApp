@@ -3,6 +3,7 @@ package com.enoca.controller;
 import com.enoca.domain.Customer;
 import com.enoca.payload.request.CustomerRequest;
 import com.enoca.payload.response.CustomerResponse;
+import com.enoca.payload.response.CustomersWithLastOrder;
 import com.enoca.payload.response.ResponseMessage;
 import com.enoca.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +66,14 @@ public class CustomerController {
     public ResponseEntity<List<Customer>> getAllWithLike(@RequestParam("name")  String name){
 
         List<Customer> customers = customerService.getAllWithLike(name);
+        return ResponseEntity.ok(customers);
+    }
+
+
+    @GetMapping("/last")
+    public ResponseEntity<List<CustomersWithLastOrder>> getCustomersWithLastOrder(@RequestParam("name")  String name){
+
+        List<CustomersWithLastOrder> customers = customerService.getCustomersWithLastOrder(name);
         return ResponseEntity.ok(customers);
     }
 

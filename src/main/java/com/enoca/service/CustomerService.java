@@ -1,9 +1,11 @@
 package com.enoca.service;
 
 import com.enoca.domain.Customer;
+import com.enoca.domain.Order;
 import com.enoca.exception.ResourceNotFoundException;
 import com.enoca.payload.request.CustomerRequest;
 import com.enoca.payload.response.CustomerResponse;
+import com.enoca.payload.response.CustomersWithLastOrder;
 import com.enoca.payload.response.ResponseMessage;
 import com.enoca.repository.CustomerRepository;
 import com.enoca.utils.message.ErrorMessage;
@@ -17,8 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -68,6 +72,7 @@ public class CustomerService {
         customer.setName(customerRequest.getName());
         customer.setAge(customerRequest.getAge());
 
+
         Customer savedCustomer = customerRepository.save(customer);
 
         return ResponseMessage.<CustomerResponse>builder()
@@ -89,8 +94,10 @@ public class CustomerService {
     public List<Customer> getAllWithLike(String name) {
 
         String lowerName = name.toLowerCase();
-        return customerRepository.findAllByNameLike(lowerName);
 
+        List<Customer> customers =customerRepository.findAllByNameLike(lowerName);
+
+        return customers;
     }
 
 
@@ -121,6 +128,34 @@ public class CustomerService {
         List<Customer> customers =customerRepository.findCustomerByOrders_Empty();
         return ResponseEntity.ok(customers);
     }
+
+    public List<CustomersWithLastOrder> getCustomersWithLastOrder(String name) {
+
+        String lowerName = name.toLowerCase();
+        List<Customer> customers =customerRepository.findAllByNameLike(lowerName);
+
+        List<CustomersWithLastOrder> newCustomer = new ArrayList<>();
+
+        for (Customer w  : customers ) {
+
+            CustomersWithLastOrder custom = new CustomersWithLastOrder();
+
+            if(w.getOrders()!=null){
+                Long maxId = w.getOrders().stream().mapToLong(Order::getId).max().orElse(0);
+                custom.setName(w.getName());
+                custom.setAge(w.getAge());
+                custom.setLastOrderId(maxId);
+            }
+
+            newCustomer.add(custom);
+
+        }
+
+        return newCustomer;
+    }
+
+
+
 
 
 }
